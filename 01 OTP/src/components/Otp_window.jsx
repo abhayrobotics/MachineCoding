@@ -9,7 +9,7 @@ const Otp_window = () => {
   const handleSubmit = () => {
     const isValidMobile = /^\d{10}$/.test(mobile);
 
-    setSubmit(mobile)
+    isValidMobile ?  setSubmit(mobile): alert("Wrong Mobile no.");
     console.log("handle submit activated", mobile, submit, isValidMobile)
   }
 
