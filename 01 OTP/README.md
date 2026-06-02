@@ -10,3 +10,4 @@
 -   directly tab should come in the otp 1st box and entering should change to next box
 -   deleting also works the same way
 -   validate the otp and check success
+-   Delete section pending
