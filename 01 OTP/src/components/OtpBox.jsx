@@ -1,22 +1,29 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const OtpBox = ({ length }) => {
   const [secret, setSecret] = useState(new Array(5).fill(""));
   const [focusId, setFocusId] = useState(0);
+
+  const inputRefs = useRef([])
   // manual otp check
   const password = 12345;
 
   // add the focus based on focus id, default is 0
+  // useEffect(() => {
+  //   if (focusId < length) {
+  //     const element1 = document.getElementById("tab" + focusId);
+  //     element1.focus();
+  //   } else {
+  //     password == secret.join("")
+  //       ? console.log("Login successful")
+  //       : console.log("Login unsuccessful");
+  //   }
+  // }, [focusId]);
   useEffect(() => {
-    if (focusId < length) {
-      const element1 = document.getElementById("tab" + focusId);
-      element1.focus();
-    } else {
-      password == secret.join("")
-        ? console.log("Login successful")
-        : console.log("Login unsuccessful");
-    }
-  }, [focusId]);
+    inputRefs.current[0]?.focus();
+  }, []);
+
+
 
   // adding the otp no. in blank field
   const handleChange = (e, id) => {
@@ -25,7 +32,12 @@ const OtpBox = ({ length }) => {
       updatedArray[id] = e;
       console.log(secret, updatedArray, secret[id]);
       setSecret(updatedArray);
-      setFocusId((prev) => prev + 1);
+      // move focus forward
+      if (e && id < length - 1) {
+        inputRefs.current[id + 1].focus();
+      }
+      // setFocusId((prev) => prev + 1);
+
     } catch (e) {
       console.log(e);
     }
@@ -38,7 +50,7 @@ const OtpBox = ({ length }) => {
     // handleChange("",id)
     // setFocusId((prev)=>prev-2)
   };
-//   !pending
+  //   !pending
 
   // pending handle change
   return (
@@ -50,7 +62,9 @@ const OtpBox = ({ length }) => {
             <input
               type="text"
               key={id}
-              id={"tab" + id}
+              ref={(element) => {
+                inputRefs.current[id] = element;
+              }}
               onKeyDown={(e) => {
                 if (e.key == "Backspace") handleDelete(id);
               }}
