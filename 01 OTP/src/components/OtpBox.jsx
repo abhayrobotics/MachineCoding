@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 const OtpBox = ({ length }) => {
-  const [secret, setSecret] = useState(new Array(5).fill(""));
+  const [secret, setSecret] = useState(new Array(length).fill(""));
   const [focusId, setFocusId] = useState(0);
 
   const inputRefs = useRef([])
@@ -30,13 +30,13 @@ const OtpBox = ({ length }) => {
     try {
       let updatedArray = [...secret];
       updatedArray[id] = e;
-      console.log(secret, updatedArray, secret[id]);
+      console.log(secret, updatedArray, updatedArray[id],id);
       setSecret(updatedArray);
       // move focus forward
       if (e && id < length - 1) {
         inputRefs.current[id + 1].focus();
       }
-      // setFocusId((prev) => prev + 1);
+      
 
     } catch (e) {
       console.log(e);
@@ -46,13 +46,17 @@ const OtpBox = ({ length }) => {
   //Handle delete the otp no.
   const handleDelete = (id) => {
 
-    // console.log("delete triggered",id,focusId)
-    // handleChange("",id)
-    // setFocusId((prev)=>prev-2)
+    if(id>=0){
+      console.log("delete triggered",id,  inputRefs.current[id].value)
+      const updatedArray = [...secret]
+      updatedArray[id]=""
+      setSecret(updatedArray)
+      
+      
+      inputRefs.current[id-1].focus()
+    }
   };
-  //   !pending
-
-  // pending handle change
+  
   return (
     <div>
       <div className=" flex">
@@ -66,7 +70,7 @@ const OtpBox = ({ length }) => {
                 inputRefs.current[id] = element;
               }}
               onKeyDown={(e) => {
-                if (e.key == "Backspace") handleDelete(id);
+                if (e.key == "Backspace") {handleDelete(id)};
               }}
               className=" border border-amber-800 p-3 m-2 text-center rounded-lg w-10 h-10"
               maxLength={1}
