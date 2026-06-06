@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 const OtpBox = ({ length }) => {
   const [secret, setSecret] = useState(new Array(length).fill(""));
-
+  const [message,setMessage]= useState("");
 
   const inputRefs = useRef([])
   // manual otp check
@@ -55,9 +55,11 @@ const OtpBox = ({ length }) => {
   const handleSubmit = () => {
     if(password == secret.join("")){
       console.log("success")
+      setMessage("Login Successful")
     }
     else{
-       console.log("wrong otp",sec)
+      console.log("wrong otp")
+      setMessage("Wrong password")
     }
   }
 
@@ -95,6 +97,7 @@ const OtpBox = ({ length }) => {
         >
           Submit
         </button>
+         <div className={message=="Login Successful"?"text-green-600": "text-red-600"}>{message}</div>
     </div>
   );
 };

@@ -11,5 +11,11 @@
 -   deleting also works the same way in reverse way
 -   additional functionality , if manually changed focus, it should update using substring
 -   validate the otp and check success
--   
+    - pending Features:
+
+        -  auto focus
+        -  backspace navigation
+        -  paste OTP
+        - arrow movement
+
 
