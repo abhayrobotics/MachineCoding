@@ -8,7 +8,8 @@
 -   send otp via api
 -   show otp window and hide login mobile window
 -   directly tab should come in the otp 1st box and entering should change to next box
--   deleting also works the same way
+-   deleting also works the same way in reverse way
+-   additional functionality , if manually changed focus, it should update using substring
 -   validate the otp and check success
--   Delete section pending ,on click
+-   
 
