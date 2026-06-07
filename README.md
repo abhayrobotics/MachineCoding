@@ -20,9 +20,9 @@
 
 
 # 02_Todo (PWA)
--   create,edit, update,,delete CRUD using local storage
+-   create,edit, update,,delete CRUD using local storage✔️ (update pending)
 -   mark urgent, completed
--   save in localstorage
+-   save in localstorage 
 -   search
 -   filter
 
@@ -38,5 +38,6 @@
     App
     -   Todo
         - Header
+            - AddItem
         - TodoList
             - ListItem

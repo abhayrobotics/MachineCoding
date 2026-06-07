@@ -33,7 +33,7 @@ const Todo = () => {
             <div className='flex justify-center  flex-col  w-1/2 max-w-210 border '>
                 <div className='text-3xl text-amber-700 text-center italic p-2 '> Flow </div>
                 <Header fetchNewItem2 ={fetchNewItem} />
-                <TodoList  todos={todos} />
+                <TodoList  todos={todos} setTodos={setTodos}/>
 
             </div>
         </div>
