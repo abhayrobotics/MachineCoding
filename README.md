@@ -19,16 +19,24 @@
         - arrow movement
 
 
-# 02_Todo
+# 02_Todo (PWA)
 -   create,edit, update,,delete CRUD using local storage
 -   mark urgent, completed
 -   save in localstorage
 -   search
 -   filter
--   
+
 -   Advanced feature
     -   notes
     -   journal
     -   streax
+    -   monthly stats, success rate
     -   
     -   PWA functionality
+
+-   Architecture:
+    App
+    -   Todo
+        - Header
+        - TodoList
+            - ListItem
