@@ -5,7 +5,7 @@ const TodoList = ({ todos }) => {
     // console.log("check",todos)
     return (
         <>
-            <div>
+            <div className='border border-amber-400'>
                 <div> Work to do</div>
                 {todos?.map((item) => <ListItem  key={item.id} item={item}/>
                 )}

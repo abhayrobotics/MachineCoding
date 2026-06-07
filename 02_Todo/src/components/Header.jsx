@@ -1,7 +1,11 @@
+import AddItem from "./AddItem"
 
-const Header = () => {
+const Header = ({fetchNewItem2}) => {
   return (
-    <div className="border m-6 w-full">Header</div>
+    <div className="flex justify-between  border  p-2 w-full">
+        <AddItem  fetchNewItem3={fetchNewItem2}/>
+        <div>Search</div>
+    </div>
   )
 }
 

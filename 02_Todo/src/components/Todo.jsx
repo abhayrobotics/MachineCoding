@@ -20,13 +20,19 @@ const Todo = () => {
         setTodos(smallList)
     }
 
+    // add new item in our main todos state
+    const fetchNewItem =(data)=>{
+        setTodos((prev)=>[...prev,{id:prev.length +1,todo:data}])
+    } 
+
+
     return (
         <>
         <div className="flex justify-center">
 
-            <div className='flex justify-center items-center flex-col  w-1/2 max-w-210 border '>
+            <div className='flex justify-center  flex-col  w-1/2 max-w-210 border '>
                 <div className='text-3xl text-amber-700 text-center italic p-2 '> Flow </div>
-                <Header />
+                <Header fetchNewItem2 ={fetchNewItem} />
                 <TodoList  todos={todos} />
 
             </div>
