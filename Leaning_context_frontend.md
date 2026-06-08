@@ -13,6 +13,7 @@ Main Focus:
 * AI Integration
 
 Long-Term Goal:
+
 * Strong React mental models
 * Production-level component architecture
 * AI-integrated full stack projects
@@ -37,6 +38,10 @@ Long-Term Goal:
 * state ownership fundamentals ✅
 * parent-child data flow ✅
 * callback props ✅
+* localStorage persistence ✅
+* multiple useEffect architecture ✅
+* state synchronization mental model ✅
+* hydration mental model ✅
 * stale closures ⚠️
 * component architecture ⚠️
 * reconciliation ❌
@@ -128,6 +133,10 @@ Architecture Concepts Learned:
 * prop drilling
 * parent passes actions to children
 * child requests parent updates through callbacks
+* React state as source of truth
+* localStorage as persistence layer
+* synchronization through effects
+* hydration from external storage
 
 ---
 
@@ -144,8 +153,11 @@ React batches updates in same execution cycle.
 Functional updates are needed when next state depends on previous state.
 
 State should live:
+
 * as low as possible
 * as high as necessary
+
+React state should remain the source of truth for UI.
 
 ---
 
@@ -153,16 +165,26 @@ State should live:
 
 Runs after render.
 
+Effects execute top-to-bottom in declaration order.
+
 Used for side effects:
+
 * API calls
 * timers
 * subscriptions
 * DOM synchronization
+* localStorage synchronization
 
 Infinite loops happen when effect updates dependency repeatedly.
 
 useEffect itself does NOT trigger render automatically.
 State updates inside effect may trigger render.
+
+One effect should ideally represent one synchronization concern.
+
+Multiple useEffects are GOOD when responsibilities are separate.
+
+Async code inside one effect does NOT block other effects.
 
 ---
 
@@ -171,6 +193,7 @@ State updates inside effect may trigger render.
 Stores mutable values without re-render.
 
 Can store:
+
 * DOM elements
 * previous values
 * timers
@@ -201,6 +224,7 @@ re-render
 value prop syncs UI
 
 Preferred for:
+
 * validation
 * predictable state
 * form control
@@ -246,6 +270,8 @@ Ref changes do NOT trigger re-render.
 
 React synchronizes UI from state after render.
 
+Effects run AFTER render commit phase.
+
 ---
 
 ## React Data Flow
@@ -264,6 +290,53 @@ Child requests parent updates by calling parent callbacks.
 
 ---
 
+## localStorage Mental Model
+
+localStorage stores ONLY strings.
+
+Need:
+
+* JSON.stringify before saving
+* JSON.parse after reading
+
+Correct architecture:
+
+localStorage
+↓
+hydrate React state
+↓
+React state controls UI
+↓
+UI updates from state
+↓
+useEffect synchronizes localStorage
+
+React state = active working memory
+
+localStorage = persistent backup storage
+
+localStorage should NOT replace React state.
+
+---
+
+## Synchronization Mental Model
+
+State is source of truth.
+
+Effects synchronize external systems.
+
+Examples:
+
+* APIs
+* localStorage
+* timers
+* subscriptions
+* DOM APIs
+
+One effect = one synchronization concern.
+
+---
+
 # Mistakes I Made
 
 * mutating state directly
@@ -274,6 +347,9 @@ Child requests parent updates by calling parent callbacks.
 * confusing ref updates with state updates
 * mixing controlled and uncontrolled behavior
 * misunderstanding callback prop execution scope
+* parsing invalid localStorage data
+* misunderstanding effect execution order
+* assuming state updates immediately after setState
 
 ---
 
@@ -288,6 +364,7 @@ Child requests parent updates by calling parent callbacks.
 * React rendering internals
 * stale closures in async callbacks
 * React reconciliation process
+* Strict Mode double effect execution
 
 ---
 
@@ -307,6 +384,11 @@ Child requests parent updates by calling parent callbacks.
 * What is lifting state up?
 * Why should state stay as low as possible?
 * Why does child not directly update parent state?
+* Why should localStorage not replace React state?
+* Why split logic into multiple useEffects?
+* When do useEffects execute?
+* Why can JSON.parse fail with localStorage?
+* What does hydration mean in React?
 
 ---
 
@@ -322,6 +404,7 @@ Child requests parent updates by calling parent callbacks.
 * state ownership thinking
 * lifting state up
 * prop drilling understanding
+* synchronization architecture basics
 * debugging curiosity
 
 ## Improving Areas
@@ -332,6 +415,7 @@ Child requests parent updates by calling parent callbacks.
 * async mental models
 * React internals
 * performance thinking
+* reconciliation understanding
 
 ---
 
@@ -355,10 +439,12 @@ Focus Order:
 Strong debugging curiosity.
 
 Learns by asking:
+
 * WHY render happens
 * WHY browser behaves differently
 * WHY React synchronization works
 * WHY state should live in certain component
+* WHY effects execute in certain order
 
 Transitioning from:
 React syntax learner
@@ -366,3 +452,5 @@ React syntax learner
 React mental model learner
 →
 React architecture learner
+→
+React synchronization thinker

@@ -8,13 +8,17 @@ const Todo = () => {
 //  1st use effect for fetching data
     useEffect(() => {
         const data = localStorage.getItem("todos")
-       if(JSON.parse(data).length==0){
-
+       if(!data || data==="undefined"){
+        console.log("1st UE")
            fetchData()
        }
        else{
+           console.log("ue else")
+        
         // const data = localStorage.getItem("todos")
-        setTodos(JSON.parse(data))
+        const newData =JSON.parse(data) 
+        setTodos(newData)
+        console.log("ue else",newData)
        }
     
     }, [])
@@ -22,8 +26,11 @@ const Todo = () => {
 
 //  2nd for loading data in local storage, after every change in local storage
     useEffect(()=>{
-         localStorage.setItem("todos", JSON.stringify(todos))
-        
+        if(todos.length>0){
+
+            localStorage.setItem("todos", JSON.stringify(todos))
+            console.log(" 2 ue",JSON.stringify(todos))
+        }
     },[todos])
 
 // fetch data from Api just at Start
@@ -43,7 +50,7 @@ const fetchNewItem = (data) => {
     // since todos is updated, 2nd useEffect is also updated due to dependency on todos
 }
 
-
+//! local storage add tem not working
 return (
     <>
         <div className="flex justify-center">

@@ -19,7 +19,7 @@ const TodoList = ({ todos ,setTodos}) => {
                 <div className=' text-2xl italic '> Work to do : </div>
                 {todos?.map((item,index) => <ListItem key={item.id} item={item} index= {index} handleDelete={handleDelete} handleUpdate={handleUpdate} />
                 )}
-                {todos.length==0 && <h1>Todo is empty</h1>}
+                {todos?.length==0 && <h1>Todo is empty</h1>}
             </div>
         </>
     )
