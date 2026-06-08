@@ -13,7 +13,7 @@ const ListItem = ({ item,index,handleDelete,handleUpdate }) => {
             <div className='flex '>
 
                 <div onClick={()=>handleUpdate(item.id)} >✏️</div>
-                <div onClick={()=>handleDelete(item.id)}>❌</div>
+                <div className="cursor-pointer hover:border p-0.5 rounded-lg"onClick={()=>handleDelete(item.id)}>❌</div>
             </div>
         </div>
     )

@@ -3,42 +3,60 @@ import TodoList from "./TodoList"
 import { useState, useEffect } from "react"
 
 const Todo = () => {
-    const [todos,setTodos] =useState([])
+    const [todos, setTodos] = useState([])
+
+//  1st use effect for fetching data
+    useEffect(() => {
+        const data = localStorage.getItem("todos")
+       if(JSON.parse(data).length==0){
+
+           fetchData()
+       }
+       else{
+        // const data = localStorage.getItem("todos")
+        setTodos(JSON.parse(data))
+       }
+    
+    }, [])
 
 
+//  2nd for loading data in local storage, after every change in local storage
     useEffect(()=>{
-        fetchData()
+         localStorage.setItem("todos", JSON.stringify(todos))
+        
+    },[todos])
 
-    },[])
+// fetch data from Api just at Start
+const fetchData = async () => {
+    const data = await fetch("https://dummyjson.com/todos")
+    const json = await data.json()
+    // console.log(json.todos)
+    const smallList = json.todos.slice(0, 10)
+    setTodos(smallList)
+}
 
-    // fetch data from Api just at Start
-    const fetchData = async ()=>{
-        const data = await fetch("https://dummyjson.com/todos")
-        const json = await data.json()
-        // console.log(json.todos)
-        const smallList = json.todos.slice(0,10)
-        setTodos(smallList)
-    }
-
-    // add new item in our main todos state
-    const fetchNewItem =(data)=>{
-        setTodos((prev)=>[...prev,{id:prev.length +1,todo:data}])
-    } 
+// add new item in our main todos state
+const fetchNewItem = (data) => {
+    
+    setTodos((prev) => [...prev, { id: prev.length + 1, todo: data }])
+    console.log(todos)
+    // since todos is updated, 2nd useEffect is also updated due to dependency on todos
+}
 
 
-    return (
-        <>
+return (
+    <>
         <div className="flex justify-center">
 
             <div className='flex justify-center  flex-col  w-1/2 max-w-210 border '>
                 <div className='text-3xl text-amber-700 text-center italic p-2 '> Flow </div>
-                <Header fetchNewItem2 ={fetchNewItem} />
-                <TodoList  todos={todos} setTodos={setTodos}/>
+                <Header fetchNewItem2={fetchNewItem} />
+                <TodoList todos={todos} setTodos={setTodos} />
 
             </div>
         </div>
-        </>
-    )
+    </>
+)
 }
 
 export default Todo
