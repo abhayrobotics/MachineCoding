@@ -9,7 +9,7 @@ const Todo = () => {
     useEffect(() => {
         const data = localStorage.getItem("todos")
        if(!data || data==="undefined"){
-        console.log("1st UE")
+        // console.log("1st UE")
            fetchData()
        }
        else{

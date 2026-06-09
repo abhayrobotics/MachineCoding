@@ -4,6 +4,7 @@ const AddItem = ({fetchNewItem3}) => {
     const [text,setText] =useState("")
         const handleAdd = () => {
             fetchNewItem3(text)
+            setText("")
     }
 
 
