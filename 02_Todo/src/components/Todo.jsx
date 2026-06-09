@@ -53,7 +53,7 @@ const fetchNewItem = (data,x) => {
         else{
             
             const updatedData = todos.map((item)=>{
-                if(item.id==x){
+                if(item.id-1==x){
                     item.todo=data
                 }
                 return item
@@ -80,7 +80,7 @@ return (
 
             <div className='flex justify-center  flex-col  w-1/2 max-w-210 border '>
                 <div className='text-3xl text-amber-700 text-center italic p-2 '> Flow </div>
-                <Header fetchNewItem2={fetchNewItem}  updateChild={updateChild}/>
+                <Header fetchNewItem2={fetchNewItem}  updateChild={updateChild} setUpdateChild={setUpdateChild}/>
                 <TodoList todos={todos} setTodos={setTodos}  handleUpdateMain={handleUpdateMain}/>
 
             </div>

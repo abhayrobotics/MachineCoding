@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-const AddItem = ({ fetchNewItem3, updateChild }) => {
+const AddItem = ({ fetchNewItem3, updateChild,setUpdateChild }) => {
     const [text, setText] = useState("")
    
     const handleAdd = () => {
@@ -20,7 +20,11 @@ const AddItem = ({ fetchNewItem3, updateChild }) => {
 
     const handleUpdate = () => {
          console.log(text,updateChild.id)
+        //  updating
             fetchNewItem3(text,updateChild.id)
+            // Swicth back to default
+            setText("")
+            setUpdateChild({})
      }
 
     return (
