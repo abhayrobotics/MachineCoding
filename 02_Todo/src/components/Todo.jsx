@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 
 const Todo = () => {
     const [todos, setTodos] = useState([])
+    const [updateChild,setUpdateChild]= useState({})
 
 //  1st use effect for fetching data
     useEffect(() => {
@@ -43,22 +44,44 @@ const fetchData = async () => {
 }
 
 // add new item in our main todos state
-const fetchNewItem = (data) => {
+const fetchNewItem = (data,x) => {
+        if(x==null){
+            
+            setTodos((prev) => [...prev, { id: prev.length + 1, todo: data }])
+            console.log(todos)
+        }
+        else{
+            
+            const updatedData = todos.map((item)=>{
+                if(item.id==x){
+                    item.todo=data
+                }
+                return item
+            })
+            console.log(updatedData)
+            setTodos(updatedData)
+        }
     
-    setTodos((prev) => [...prev, { id: prev.length + 1, todo: data }])
-    console.log(todos)
     // since todos is updated, 2nd useEffect is also updated due to dependency on todos
 }
 
-//! local storage add tem not working
+// handle update
+const handleUpdateMain=(x)=>{
+    console.log(x);
+    const updateChildText = todos.filter((item)=>item.id==x)
+    setUpdateChild({"id":x-1,"text":updateChildText[0].todo})
+    console.log(x-1,updateChildText[0].todo)
+} 
+
+
 return (
     <>
         <div className="flex justify-center">
 
             <div className='flex justify-center  flex-col  w-1/2 max-w-210 border '>
                 <div className='text-3xl text-amber-700 text-center italic p-2 '> Flow </div>
-                <Header fetchNewItem2={fetchNewItem} />
-                <TodoList todos={todos} setTodos={setTodos} />
+                <Header fetchNewItem2={fetchNewItem}  updateChild={updateChild}/>
+                <TodoList todos={todos} setTodos={setTodos}  handleUpdateMain={handleUpdateMain}/>
 
             </div>
         </div>
