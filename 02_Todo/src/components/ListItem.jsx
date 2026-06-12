@@ -10,8 +10,8 @@ const ListItem = ({ item, index, handleDelete, handleUpdateMain }) => {
     return (
         <div className='flex  justify-between'>
             <div className='flex '>
-                {/* <input type='checkbox'></input> */}
-                <div className='w-5 text-right mx-2'>{index + 1}.</div>
+                <input className='w-3 text-right mx-2' type='checkbox'></input>
+                {/* <div className='w-5 text-right mx-2'>{index + 1}.</div> */}
                 <div>{item.todo}</div>
             </div>
             <div className='flex '>
