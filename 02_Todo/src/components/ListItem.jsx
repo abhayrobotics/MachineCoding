@@ -10,11 +10,12 @@ const ListItem = ({ item, index, handleDelete, handleUpdateMain }) => {
     return (
         <div className='flex  justify-between'>
             <div className='flex '>
+                {/* <input type='checkbox'></input> */}
                 <div className='w-5 text-right mx-2'>{index + 1}.</div>
                 <div>{item.todo}</div>
             </div>
             <div className='flex '>
-
+                
                 <div onClick={() => handleUpdate(item.id)} >✏️</div>
                 <div className="cursor-pointer hover:border p-0.5 rounded-lg" onClick={() => handleDelete(item.id)}>❌</div>
             </div>

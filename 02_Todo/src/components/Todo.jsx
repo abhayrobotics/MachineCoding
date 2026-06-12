@@ -14,12 +14,12 @@ const Todo = () => {
            fetchData()
        }
        else{
-           console.log("ue else")
+        //    console.log("ue else")
         
         // const data = localStorage.getItem("todos")
         const newData =JSON.parse(data) 
         setTodos(newData)
-        console.log("ue else",newData)
+        // console.log("ue else",newData)
        }
     
     }, [])
@@ -30,7 +30,7 @@ const Todo = () => {
         if(todos.length>0){
 
             localStorage.setItem("todos", JSON.stringify(todos))
-            console.log(" 2 ue",JSON.stringify(todos))
+            // console.log(" 2 ue",JSON.stringify(todos))
         }
     },[todos])
 
@@ -48,7 +48,7 @@ const fetchNewItem = (data,x) => {
         if(x==null){
             
             setTodos((prev) => [...prev, { id: prev.length + 1, todo: data }])
-            console.log(todos)
+            // console.log(todos)
         }
         else{
             
@@ -58,7 +58,7 @@ const fetchNewItem = (data,x) => {
                 }
                 return item
             })
-            console.log(updatedData)
+            // console.log(updatedData)
             setTodos(updatedData)
         }
     
@@ -67,10 +67,10 @@ const fetchNewItem = (data,x) => {
 
 // handle update
 const handleUpdateMain=(x)=>{
-    console.log(x);
+    // console.log(x);
     const updateChildText = todos.filter((item)=>item.id==x)
     setUpdateChild({"id":x-1,"text":updateChildText[0].todo})
-    console.log(x-1,updateChildText[0].todo)
+    // console.log(x-1,updateChildText[0].todo)
 } 
 
 
@@ -78,7 +78,7 @@ return (
     <>
         <div className="flex justify-center">
 
-            <div className='flex justify-center  flex-col  w-1/2 max-w-210 border '>
+            <div className='flex justify-center  flex-col min-w-150 w-1/2 max-w-210 border '>
                 <div className='text-3xl text-amber-700 text-center italic p-2 '> Flow </div>
                 <Header fetchNewItem2={fetchNewItem}  updateChild={updateChild} setUpdateChild={setUpdateChild}/>
                 <TodoList todos={todos} setTodos={setTodos}  handleUpdateMain={handleUpdateMain}/>

@@ -10,7 +10,7 @@ const AddItem = ({ fetchNewItem3, updateChild,setUpdateChild }) => {
         setText("")
     }
     useEffect(() => {
-        console.log(Object.keys(updateChild).length)
+        // console.log(Object.keys(updateChild).length)
         if (Object.keys(updateChild).length!==0){
             
             setText(()=>updateChild.text)
