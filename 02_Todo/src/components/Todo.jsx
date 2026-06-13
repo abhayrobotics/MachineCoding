@@ -1,3 +1,4 @@
+import AddItem from "./AddItem"
 import Header from "./Header"
 import TodoList from "./TodoList"
 import { useState, useEffect } from "react"
@@ -6,11 +7,12 @@ const Todo = () => {
     const [todos, setTodos] = useState([])
     const [updateChild, setUpdateChild] = useState({})
 
+
     //  1st use effect for fetching data
     useEffect(() => {
         const data = localStorage.getItem("todos")
         if (!data || data === "undefined") {
-            // console.log("1st UE")
+            // console.log("1st UE"
             fetchData()
         }
         else {
@@ -44,23 +46,26 @@ const Todo = () => {
     }
 
     // add new item in our main todos state
-    const fetchNewItem = (data, x,status,date,priority) => {
+    const fetchNewItem = (data, x, status, date, priority) => {
         if (x == null) {
 
             setTodos((prev) => [...prev, {
                 id: prev.length + 1,
                 todo: data,
-                status:status,
-                date:date,
-                priority:priority
+                status: status,
+                date: date,
+                priority: priority
             }])
             console.log(todos)
         }
         else {
-
+            // update data to flow on our main todos
             const updatedData = todos.map((item) => {
                 if (item.id - 1 == x) {
-                    item.todo = data
+                    item.todo = data;
+                    item.date =date;
+                    item.priority =priority;
+                    item.status=status;
                 }
                 return item
             })
@@ -73,9 +78,14 @@ const Todo = () => {
 
     // handle update
     const handleUpdateMain = (x) => {
-        // console.log(x);
-        const updateChildText = todos.filter((item) => item.id == x)
-        setUpdateChild({ "id": x - 1, "text": updateChildText[0].todo })
+        const ItemToUpdate = todos.find((item) => item.id == x)
+        console.log(ItemToUpdate);
+        setUpdateChild({ "id": x - 1,
+             "todo": ItemToUpdate.todo,
+             "date":ItemToUpdate.date,
+             "priority":ItemToUpdate.priority,
+             "status":ItemToUpdate.status
+                 })
         // console.log(x-1,updateChildText[0].todo)
     }
 
@@ -85,10 +95,17 @@ const Todo = () => {
             <div className="flex justify-center">
 
                 <div className='flex justify-center  flex-col min-w-150 w-1/2 max-w-210 border '>
-                    <div className='text-3xl text-amber-700 text-center italic p-2 '> Flow </div>
-                    <Header fetchNewItem2={fetchNewItem} updateChild={updateChild} setUpdateChild={setUpdateChild} />
-                    <TodoList todos={todos} setTodos={setTodos} handleUpdateMain={handleUpdateMain} />
 
+                    <div className='text-3xl text-amber-700 text-center italic p-2 '> Flow </div>
+
+                    {/* HEader section */}
+                    <div className="flex justify-between flex-col  border rounded-lg p-2 w-full">
+                        <AddItem fetchNewItem={fetchNewItem} updateChild={updateChild} setUpdateChild={setUpdateChild} />
+                        <div>Search</div>
+                    </div>
+
+                    <TodoList todos={todos} setTodos={setTodos} handleUpdateMain={handleUpdateMain} />
+                    {/*  date={date} setDate={setDate} priority={priority} setPriority={setPriority} status */}
                 </div>
             </div>
         </>
