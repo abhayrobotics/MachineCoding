@@ -21,8 +21,9 @@
 
 # 02_Todo (PWA)
 -   create,edit, update,,delete CRUD using local storage✔️ (update pending)
--   mark urgent, completed
+-   check box completed
 -   save in localstorage ✔️
+-   Add date and Priority ✔️
 -   search
 -   filter
 

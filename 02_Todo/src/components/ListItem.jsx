@@ -8,9 +8,9 @@ const ListItem = ({ item, index, handleDelete, handleUpdateMain }) => {
    }
 
     return (
-        <div className='flex  justify-between'>
-            <div className='flex '>
-                <input className='w-3 text-right mx-2' type='checkbox'></input>
+        <div className='flex  justify-between border'>
+            <div className='flex  '>
+                <input className='w-3 text-right mr-3' type='checkbox'></input>
                 {/* <div className='w-5 text-right mx-2'>{index + 1}.</div> */}
                 <div>{item.todo}</div>
             </div>
@@ -19,6 +19,7 @@ const ListItem = ({ item, index, handleDelete, handleUpdateMain }) => {
                 <div onClick={() => handleUpdate(item.id)} >✏️</div>
                 <div className="cursor-pointer hover:border p-0.5 rounded-lg" onClick={() => handleDelete(item.id)}>❌</div>
             </div>
+            
         </div>
     )
 }

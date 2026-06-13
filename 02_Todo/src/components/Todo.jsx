@@ -44,15 +44,15 @@ const Todo = () => {
     }
 
     // add new item in our main todos state
-    const fetchNewItem = (data, x) => {
+    const fetchNewItem = (data, x,status,date,priority) => {
         if (x == null) {
 
             setTodos((prev) => [...prev, {
                 id: prev.length + 1,
                 todo: data,
-                status:"Normal",
-                date:"12-06-2026",
-                priority: "High"
+                status:status,
+                date:date,
+                priority:priority
             }])
             console.log(todos)
         }
