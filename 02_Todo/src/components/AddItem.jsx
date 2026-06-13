@@ -20,7 +20,7 @@ const AddItem = ({ fetchNewItem, updateChild, setUpdateChild }) => {
     const handleAdd = () => {
         if (text !== "") {
 
-            fetchNewItem(text, null, "Pending", date, priority)
+            fetchNewItem(text, null, false, date, priority)
 
             // setting back to default
             setText("")
@@ -45,7 +45,7 @@ const AddItem = ({ fetchNewItem, updateChild, setUpdateChild }) => {
         console.log(text, updateChild)
         
             //  updating
-            fetchNewItem(text, updateChild.id, "Pending", date, priority)
+            fetchNewItem(text, updateChild.id, false, date, priority)
         // Switch back to default
         setText("")
         setUpdateChild({})

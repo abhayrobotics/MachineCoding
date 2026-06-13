@@ -1,12 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-const ListItem = ({ item, handleDelete, handleUpdateMain }) => {
+const ListItem = ({ item, handleDelete, handleUpdateMain ,handleChecked}) => {
 
+    const [status,setStatus] =useState(false)
+   
     const handleUpdate = (id) => {
-
         handleUpdateMain(id)
     }
 
+    const handleChange =()=>{
+        handleChecked(item.id)
+    }
+
+
+    
     // css
     const priorityClass = {
         "High": "text-amber-600 bg-amber-100",
@@ -16,7 +23,7 @@ const ListItem = ({ item, handleDelete, handleUpdateMain }) => {
 
     return (
         <div className='flex  justify-between items-center hover:border bg-(--code-bg)  rounded-lg p-2 my-2  '>
-            <input className='w-3 text-right mr-3' type='checkbox'></input>
+            <input className='w-3 text-right mr-3' type='checkbox' checked={item.status} onChange={handleChange}  ></input>
             <div className='flex  flex-col  w-full  '>
                 <div className='flex text-lg'>
 
