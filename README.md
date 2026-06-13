@@ -32,7 +32,6 @@
     -   journal
     -   streax
     -   monthly stats, success rate
-    -   
     -   PWA functionality
 
 -   Architecture:

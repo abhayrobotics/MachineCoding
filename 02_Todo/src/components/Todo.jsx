@@ -29,7 +29,7 @@ const Todo = () => {
 
     //  2nd for loading data in local storage, after every change in local storage
     useEffect(() => {
-        if (todos.length >= 0) {
+        if (todos.length >0) {
 
             localStorage.setItem("todos", JSON.stringify(todos))
             // console.log(" 2 ue",JSON.stringify(todos))
@@ -100,14 +100,17 @@ const Todo = () => {
         <>
             <div className="flex justify-center">
 
-                <div className='flex justify-center  flex-col min-w-150 w-1/2 max-w-210 border '>
+                <div className='flex justify-center  flex-col min-w-150 w-1/2 max-w-210  '>
 
                     <div className='text-3xl text-amber-700 text-center italic p-2 '> Flow </div>
 
                     {/* HEader section */}
                     <div className="flex justify-between flex-col  border rounded-lg p-2 w-full">
                         <AddItem fetchNewItem={fetchNewItem} updateChild={updateChild} setUpdateChild={setUpdateChild} />
-                        <div>Search</div>
+                        <div>
+                            <div>Search</div>
+                            <div>Filter</div>
+                        </div>
                     </div>
 
                     <TodoList todos={todos} setTodos={setTodos} handleUpdateMain={handleUpdateMain}  handleDelete={handleDelete}/>
