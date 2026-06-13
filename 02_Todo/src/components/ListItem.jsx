@@ -1,6 +1,6 @@
 import React from 'react'
 
-const ListItem = ({ item, index, handleDelete, handleUpdateMain }) => {
+const ListItem = ({ item, handleDelete, handleUpdateMain }) => {
 
     const handleUpdate = (id) => {
 
@@ -20,7 +20,6 @@ const ListItem = ({ item, index, handleDelete, handleUpdateMain }) => {
             <div className='flex  flex-col  w-full  '>
                 <div className='flex text-lg'>
 
-                    {/* <div className='w-5 text-right mx-2'>{index + 1}.</div> */}
                     <div>{item.todo}</div>
                 </div>
                 <div className='flex i'>

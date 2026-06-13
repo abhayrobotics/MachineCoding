@@ -29,7 +29,7 @@ const Todo = () => {
 
     //  2nd for loading data in local storage, after every change in local storage
     useEffect(() => {
-        if (todos.length > 0) {
+        if (todos.length >= 0) {
 
             localStorage.setItem("todos", JSON.stringify(todos))
             // console.log(" 2 ue",JSON.stringify(todos))
@@ -88,7 +88,13 @@ const Todo = () => {
                  })
         // console.log(x-1,updateChildText[0].todo)
     }
-
+    // Handle delete
+    const handleDelete = (x) => {
+        console.log("handleDelete called",x)
+        const filtered = todos.filter((item)=> item.id!=x)
+        setTodos(filtered)
+        
+    }
 
     return (
         <>
@@ -104,8 +110,8 @@ const Todo = () => {
                         <div>Search</div>
                     </div>
 
-                    <TodoList todos={todos} setTodos={setTodos} handleUpdateMain={handleUpdateMain} />
-                    {/*  date={date} setDate={setDate} priority={priority} setPriority={setPriority} status */}
+                    <TodoList todos={todos} setTodos={setTodos} handleUpdateMain={handleUpdateMain}  handleDelete={handleDelete}/>
+                    
                 </div>
             </div>
         </>

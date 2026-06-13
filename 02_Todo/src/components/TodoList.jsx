@@ -1,15 +1,11 @@
 import React from 'react'
 import ListItem from './ListItem'
 
-const TodoList = ({ todos ,setTodos,handleUpdateMain}) => {
+const TodoList = ({ todos ,setTodos,handleUpdateMain, handleDelete}) => {
     // console.log("check",todos)
 
     
-    const handleDelete = (x) => {
-        const filtered = todos.filter((item)=> item.id!=x)
-        setTodos(filtered)
-
-    }
+    
     
     return (
         <>
