@@ -13,7 +13,7 @@ const TodoList = ({ todos ,setTodos,handleUpdateMain}) => {
     
     return (
         <>
-            <div className='border border-amber-400'>
+            <div className=''>
                 <div className=' text-2xl italic '> Work to do : </div>
                 {todos?.map((item,index) => <ListItem key={item.id} item={item} index= {index} handleDelete={handleDelete} handleUpdateMain={handleUpdateMain}  />
                 )}
