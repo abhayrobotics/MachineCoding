@@ -1,8 +1,6 @@
-import React, { useState } from 'react'
 
 const ListItem = ({ item, handleDelete, handleUpdateMain ,handleChecked}) => {
 
-    const [status,setStatus] =useState(false)
    
     const handleUpdate = (id) => {
         handleUpdateMain(id)
@@ -25,7 +23,7 @@ const ListItem = ({ item, handleDelete, handleUpdateMain ,handleChecked}) => {
         <div className='flex  justify-between items-center hover:border bg-(--code-bg)  rounded-lg p-2 my-2  '>
             <input className='w-3 text-right mr-3' type='checkbox' checked={item.status} onChange={handleChange}  ></input>
             <div className='flex  flex-col  w-full  '>
-                <div className='flex text-lg'>
+                <div className={`flex text-lg ${item.status?"line-through text-gray-500 text-md":""}` } >
 
                     <div>{item.todo}</div>
                 </div>
