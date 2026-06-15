@@ -769,3 +769,380 @@ Need stronger mastery of:
 * object references
 
 before moving aggressively into advanced React topics.
+
+
+# JavaScript Mental Model — References, Shallow Copy & Deep Copy
+
+## Primitive vs Reference Types
+
+### Primitive Types
+
+Examples:
+
+```js
+number
+string
+boolean
+null
+undefined
+```
+
+Assignment copies the value.
+
+```js
+let a = 10;
+let b = a;
+
+b = 20;
+```
+
+Result:
+
+```js
+a // 10
+b // 20
+```
+
+No connection exists between `a` and `b`.
+
+---
+
+### Reference Types
+
+Examples:
+
+```js
+Object
+Array
+Function
+```
+
+Assignment copies the reference, not the object.
+
+```js
+const a = { name: "Abhay" };
+const b = a;
+```
+
+Memory:
+
+```text
+a ----\
+       ---> Object1
+b ----/
+```
+
+Both variables point to the same object.
+
+---
+
+## Equality Operator (`===`)
+
+### Primitives
+
+Compares values.
+
+```js
+5 === 5 // true
+```
+
+### Objects & Arrays
+
+Compares references.
+
+```js
+const a = {};
+const b = {};
+
+a === b // false
+```
+
+Different objects.
+
+```js
+const a = {};
+const b = a;
+
+a === b // true
+```
+
+Same object reference.
+
+---
+
+## Shallow Copy
+
+Copies only the first level.
+
+Nested objects and arrays remain shared.
+
+Example:
+
+```js
+const user = {
+  name: "Abhay",
+  address: {
+    city: "Siliguri"
+  }
+};
+
+const copy = {
+  ...user
+};
+```
+
+Result:
+
+```js
+copy === user // false
+
+copy.address === user.address // true
+```
+
+Top-level object is new.
+
+Nested object is shared.
+
+---
+
+### Shallow Copy Danger
+
+```js
+copy.address.city = "Kolkata";
+```
+
+Now:
+
+```js
+user.address.city // "Kolkata"
+```
+
+because both objects share the same nested reference.
+
+---
+
+## Deep Copy
+
+Copies every level recursively.
+
+No shared references remain.
+
+Example:
+
+```js
+const copy = structuredClone(user);
+```
+
+Result:
+
+```js
+copy === user // false
+
+copy.address === user.address // false
+```
+
+Completely independent objects.
+
+---
+
+## Spread Operator Mental Model
+
+### Object Spread
+
+```js
+const copy = {
+  ...user
+};
+```
+
+Creates:
+
+```text
+New top-level object
+```
+
+Does NOT create:
+
+```text
+New nested objects
+```
+
+---
+
+### Array Spread
+
+```js
+const copy = [...todos];
+```
+
+Creates:
+
+```text
+New array
+```
+
+Does NOT create:
+
+```text
+New objects inside array
+```
+
+Example:
+
+```js
+const a = [{ name: "React" }];
+const b = [...a];
+
+b[0].name = "Node";
+```
+
+Result:
+
+```js
+a[0].name // "Node"
+```
+
+because object inside array is still shared.
+
+---
+
+## React Connection
+
+### Wrong (Mutation)
+
+```js
+const updatedTodos = [...todos];
+
+updatedTodos[0].status = true;
+```
+
+Array copied.
+
+Todo object NOT copied.
+
+State mutation occurs.
+
+---
+
+### Correct (Immutable Update)
+
+```js
+const updatedTodos = todos.map(item =>
+  item.id === id
+    ? { ...item, status: true }
+    : item
+);
+```
+
+Creates:
+
+```text
+New array
+New updated object
+Old untouched objects reused
+```
+
+No mutation.
+
+---
+
+## Why React Prefers Immutable Updates
+
+Benefits:
+
+* predictable rendering
+* easier debugging
+* reliable state tracking
+* React can detect changes through references
+* supports performance optimizations
+
+---
+
+## Rules To Remember
+
+### Rule 1
+
+```js
+const b = a;
+```
+
+Creates:
+
+```text
+New object? ❌ No
+New reference? ❌ No
+```
+
+Same object.
+
+---
+
+### Rule 2
+
+```js
+const b = { ...a };
+```
+
+Creates:
+
+```text
+New top-level object ✅
+New nested objects ❌
+```
+
+Shallow copy.
+
+---
+
+### Rule 3
+
+```js
+const b = [...a];
+```
+
+Creates:
+
+```text
+New array ✅
+New objects inside ❌
+```
+
+Shallow copy.
+
+---
+
+### Rule 4
+
+If nested data must be updated:
+
+```js
+{
+  ...parent,
+  child: {
+    ...parent.child,
+    updatedField: value
+  }
+}
+```
+
+Copy every level along the path being updated.
+
+---
+
+## Interview Answers
+
+### What is a shallow copy?
+
+A copy where only the first level is duplicated and nested objects remain shared by reference.
+
+### What is a deep copy?
+
+A copy where all nested levels are duplicated and no references are shared.
+
+### Why can object spread cause bugs?
+
+Because spread performs a shallow copy, nested objects remain shared and may be accidentally mutated.
+
+### Why does React prefer immutable updates?
+
+Because React relies heavily on reference changes to detect state updates efficiently.
