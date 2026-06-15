@@ -568,3 +568,204 @@ React architecture learner
 React synchronization thinker
 →
 React state management thinker
+
+## Todo App (Additional Learning)
+
+Architecture Concepts Learned:
+
+* checkbox state synchronization
+* task completion toggle architecture
+* immutable update using map()
+* find vs filter vs map use cases
+* single source of truth for checkbox state
+* presentational vs state-owning component thinking
+* callback-driven CRUD operations
+* edit/update lifecycle through parent state
+
+---
+
+## React
+
+* checkbox controlled components ✅
+* map/filter/find CRUD patterns ✅
+* immutable array updates ✅
+* immutable object updates ⚠️
+* component responsibility separation ⚠️
+
+---
+
+## Controlled Inputs
+
+Checkboxes follow the same controlled pattern.
+
+Flow:
+
+checked state
+↓
+checked prop
+↓
+UI
+
+User click
+↓
+onChange
+↓
+setState
+↓
+re-render
+↓
+checked updates
+
+---
+
+## React Data Flow
+
+State Owner:
+
+```text
+Todo
+```
+
+Children should:
+
+```text
+Display data
+↓
+Request updates
+↓
+Parent updates state
+```
+
+Avoid duplicate state across parent and child.
+
+Prefer:
+
+```text
+One source of truth
+```
+
+for the same piece of data.
+
+---
+
+## Immutable Update Mental Model
+
+Different array methods have different purposes.
+
+Update:
+
+```text
+map()
+```
+
+Delete:
+
+```text
+filter()
+```
+
+Find one item:
+
+```text
+find()
+```
+
+Mental Model:
+
+```text
+Need one item?
+↓
+find()
+
+Need updated array?
+↓
+map()
+
+Need reduced array?
+↓
+filter()
+```
+
+---
+
+## New Mistakes I Made
+
+* creating unused local state inside ListItem
+* duplicating state already owned by parent
+* using filter()[0] when find() was more appropriate
+* mutating objects before understanding immutable update pattern
+* passing too many callback props and losing track of ownership flow
+* difficulty identifying state owner during component communication
+
+---
+
+## Current Confusions
+
+* when state should remain in parent vs move to child
+* component responsibility boundaries
+* callback scaling in deeper component trees
+* render propagation through component hierarchy
+
+---
+
+## Interview Questions To Revise
+
+* Why is map() used for update operations?
+* Why is filter() used for delete operations?
+* Why is find() used instead of filter()[0]?
+* What is a controlled checkbox?
+* What is the source of truth for a controlled component?
+* Why should state not be duplicated?
+* What problems occur when parent and child store the same data?
+* How do you update one object inside an array state immutably?
+* What is the difference between state ownership and prop drilling?
+
+---
+
+## Strong Areas
+
+* CRUD thinking
+* debugging state updates
+* controlled component understanding
+* callback-based parent-child communication
+* localStorage synchronization
+* React data flow understanding
+
+---
+
+## Improving Areas
+
+* immutable updates becoming habit
+* component responsibility design
+* state ownership identification
+* callback architecture organization
+* JavaScript data transformation fluency
+* object reference mental model
+
+---
+
+# Important Personal Observation
+
+New learning pattern discovered:
+
+Often React confusion is actually:
+
+```text
+JavaScript object reference issue
+↓
+array transformation issue
+↓
+immutability issue
+```
+
+rather than a React hook issue.
+
+Need stronger mastery of:
+
+* map()
+* filter()
+* find()
+* spread operator
+* object references
+
+before moving aggressively into advanced React topics.

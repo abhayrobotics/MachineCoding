@@ -1,10 +1,11 @@
 import AddItem from "./AddItem"
-import Header from "./Header"
 import TodoList from "./TodoList"
 import { useState, useEffect } from "react"
 
 const Todo = () => {
     const [todos, setTodos] = useState([])
+    const [FullList  ,setFullList] =useState([])
+    const [searchText,setSearchText] =useState("")
     const [updateChild, setUpdateChild] = useState({})
 
 
@@ -13,7 +14,7 @@ const Todo = () => {
         const data = localStorage.getItem("todos")
         if (!data || data === "undefined") {
             // console.log("1st UE"
-            fetchData()
+            // fetchData()
         }
         else {
             //    console.log("ue else")
@@ -50,7 +51,7 @@ const Todo = () => {
         if (x == null) {
 
             setTodos((prev) => [...prev, {
-                id: prev.length + 1,
+                id: Date.now(),
                 todo: data,
                 status: status,
                 date: date,
@@ -62,10 +63,13 @@ const Todo = () => {
             // update data to flow on our main todos
             const updatedData = todos.map((item) => {
                 if (item.id - 1 == x) {
-                    item.todo = data;
-                    item.date =date;
-                    item.priority =priority;
-                    item.status=status;
+                    return{
+                        ...item,
+                        todo : data,
+                        date,
+                        priority,
+                        status,
+                    }
                 }
                 return item
             })
@@ -96,6 +100,16 @@ const Todo = () => {
         
     }
 
+    //handle Search
+    const handleSearch =()=>{
+        setFullList(todos)
+            const filteredList = todos.filter((item)=> item.todo.toLowerCase().includes(searchText.toLowerCase()))
+            setTodos(filteredList)
+            console.log(filteredList)
+            // back to default
+            setSearchText("")
+    }
+
     return (
         <>
             <div className="flex justify-center">
@@ -107,9 +121,13 @@ const Todo = () => {
                     {/* HEader section */}
                     <div className="flex justify-between flex-col  border rounded-lg p-2 w-full">
                         <AddItem fetchNewItem={fetchNewItem} updateChild={updateChild} setUpdateChild={setUpdateChild} />
-                        <div>
-                            <div>Search</div>
-                            <div>Filter</div>
+                        <div className='flex justify-between my-2   p-3 w-full bg-(--code-bg) rounded-lg'>
+                            <div >
+                                <input  className='border rounded-lg p-0.5 px-2 w-full mr-2' type="text" className="border" value={searchText} onChange={(e)=>setSearchText(e.target.value)} ></input>
+                                <button className='border rounded-lg px-2 mx-1 py-0.5 bg-blue-800 cursor-pointer hover:text-white' onClick={handleSearch}>Search</button>
+                                <button  className='border rounded-lg px-2 mx-1 py-0.5 bg-blue-800 cursor-pointer hover:text-white' onClick={()=>setTodos(FullList)}>Reset Search</button>
+                            </div>
+                            <div >Filter</div>
                         </div>
                     </div>
 
