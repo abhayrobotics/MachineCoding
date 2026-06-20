@@ -24,11 +24,12 @@
 -   check box completed
 -   save in localstorage ✔️
 -   Add date and Priority ✔️
--   search
--   filter
+-   search✔️
+-   filter ✔️
 
 -   Advanced feature
-    -   notes
+    -  steeax in my mobile wallpaper or widget
+   -   notes
     -   journal
     -   streax
     -   monthly stats, success rate

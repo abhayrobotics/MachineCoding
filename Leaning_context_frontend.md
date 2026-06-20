@@ -1519,3 +1519,504 @@ Meaning:
 ### What problem does `?.` solve in React?
 
 ---
+# Recent Learning — JavaScript Closures & Stale Closures
+
+---
+
+## Closure Fundamentals
+
+### Definition
+
+A closure is:
+
+```js
+function + lexical environment
+```
+
+A function remembers variables from the scope where it was created, even after that scope has finished execution.
+
+Example:
+
+```js
+function outer() {
+  let count = 0;
+
+  return function increment() {
+    count++;
+    console.log(count);
+  };
+}
+```
+
+The returned function keeps access to `count` after `outer()` has finished.
+
+---
+
+## Core Mental Model
+
+### Closures DO NOT Store Values
+
+Wrong:
+
+```text
+Closure stores:
+count = 0
+```
+
+Correct:
+
+```text
+Closure stores:
+where count lives
+```
+
+Think:
+
+```text
+count
+ ↓
+Memory Box
+```
+
+The closure remembers the memory box, not the current value inside it.
+
+---
+
+## Variable vs Value
+
+### Variable Reference
+
+```js
+let count = 0;
+
+setTimeout(() => {
+  console.log(count);
+}, 1000);
+
+count = 5;
+```
+
+Output:
+
+```text
+5
+```
+
+Reason:
+
+The callback reads the current value of `count` when it executes.
+
+---
+
+### Captured Value
+
+```js
+let count = 0;
+
+const saved = count;
+
+setTimeout(() => {
+  console.log(saved);
+}, 1000);
+
+count = 5;
+```
+
+Output:
+
+```text
+0
+```
+
+Reason:
+
+`saved` received a copy of the value.
+
+The callback reads `saved`, not `count`.
+
+---
+
+## Shared Closure Example
+
+```js
+function outer() {
+  let count = 0;
+
+  function increment() {
+    count++;
+  }
+
+  function log() {
+    console.log(count);
+  }
+
+  return {
+    increment,
+    log
+  };
+}
+```
+
+Closure:
+
+```text
+Closure
+│
+└── count
+```
+
+Both functions share the same variable.
+
+---
+
+## Stale Closure Example
+
+```js
+function outer() {
+  let count = 0;
+
+  const message = `Count is ${count}`;
+
+  function log() {
+    console.log(message);
+  }
+
+  return {
+    log
+  };
+}
+```
+
+Problem:
+
+```js
+message
+```
+
+is calculated once.
+
+Later updates to `count` do not update `message`.
+
+Output becomes stale.
+
+---
+
+## Fixing Stale Closures
+
+Wrong:
+
+```js
+const message = `Count is ${count}`;
+```
+
+Correct:
+
+```js
+function log() {
+  console.log(`Count is ${count}`);
+}
+```
+
+Reason:
+
+The value is calculated when the function executes.
+
+---
+
+## Multiple Timers Sharing One Variable
+
+```js
+function outer() {
+  let count = 0;
+
+  setTimeout(() => {
+    console.log(count);
+  }, 1000);
+
+  count = 5;
+}
+
+outer();
+```
+
+Output:
+
+```text
+5
+```
+
+Reason:
+
+The callback remembers the variable, not the value.
+
+---
+
+## Multiple Timers Example
+
+```js
+function outer() {
+  let count = 0;
+
+  setTimeout(() => console.log("A", count), 3000);
+
+  count = 10;
+
+  setTimeout(() => console.log("B", count), 2000);
+
+  count = 20;
+
+  setTimeout(() => console.log("C", count), 1000);
+}
+```
+
+Output:
+
+```text
+C 20
+B 20
+A 20
+```
+
+Reason:
+
+All callbacks share the same `count` variable.
+
+---
+
+## Closure with Saved Snapshot
+
+```js
+function outer() {
+  let count = 0;
+
+  return function () {
+    count++;
+
+    const saved = count;
+
+    setTimeout(() => {
+      console.log(saved);
+    }, 1000);
+
+    count++;
+  };
+}
+```
+
+Output:
+
+```text
+1
+```
+
+Reason:
+
+The callback references `saved`, not `count`.
+
+`saved` never changes.
+
+---
+
+## Shared Variable Example
+
+```js
+function outer() {
+  let count = 0;
+
+  return function() {
+    count++;
+
+    setTimeout(() => {
+      console.log(count);
+    }, 1000);
+
+    count++;
+  };
+}
+```
+
+Output:
+
+```text
+2
+```
+
+Reason:
+
+The callback reads the current value of `count` when it executes.
+
+---
+
+## var vs let in Closures
+
+### var
+
+```js
+for (var i = 1; i <= 3; i++) {
+  setTimeout(() => {
+    console.log(i);
+  }, 1000);
+}
+```
+
+Output:
+
+```text
+4
+4
+4
+```
+
+Reason:
+
+`var` creates one shared variable.
+
+All callbacks read the same variable.
+
+---
+
+### let
+
+```js
+for (let i = 1; i <= 3; i++) {
+  setTimeout(() => {
+    console.log(i);
+  }, 1000);
+}
+```
+
+Output:
+
+```text
+1
+2
+3
+```
+
+Reason:
+
+`let` creates a new variable for each loop iteration.
+
+Each callback gets its own variable.
+
+---
+
+## React Connection
+
+React renders create new closures.
+
+Think:
+
+```text
+Render #1
+count = 0
+
+Render #2
+count = 5
+```
+
+Each render gets:
+
+```text
+new variables
+new functions
+new closure
+```
+
+Old callbacks continue using old render variables.
+
+This is the foundation of React stale closures.
+
+Example:
+
+```jsx
+setTimeout(() => {
+  console.log(count);
+}, 1000);
+```
+
+The callback uses the `count` from the render where it was created.
+
+---
+
+# Key Rules To Remember
+
+### Rule 1
+
+Closures store variables, not values.
+
+### Rule 2
+
+The important question is:
+
+```text
+Which variable does the closure point to?
+```
+
+### Rule 3
+
+Multiple functions can share the same closure.
+
+### Rule 4
+
+Stale closures happen when a value is computed too early.
+
+### Rule 5
+
+`var` creates one shared variable.
+
+### Rule 6
+
+`let` creates a new variable per iteration.
+
+### Rule 7
+
+React renders create new closures.
+
+### Rule 8
+
+Old React callbacks use old render variables.
+
+---
+
+# Interview Questions To Revise
+
+* What is a closure?
+* Does a closure store values or variables?
+* What is a lexical environment?
+* Why does setTimeout often print updated values?
+* What creates a stale closure?
+* Difference between reading a variable and reading a copied value?
+* Why does `var` print `4 4 4`?
+* Why does `let` print `1 2 3`?
+* Why can React callbacks see old state?
+* Why does storing `const saved = count` change behavior?
+* Why do closures keep variables alive?
+* What is the difference between a stale value and a stale closure?
+
+---
+
+# Learning Status Update
+
+## Strong Areas Added
+
+* JavaScript closures fundamentals
+* lexical environments
+* variable vs value mental model
+* stale closure basics
+* timer callback behavior
+* shared vs separate closure variables
+* var vs let closure behavior
+* React stale closure foundations
+
+## Remaining Gaps
+
+* useEffect stale closures
+* dependency arrays
+* functional state updates
+* React render cycle internals
+* reconciliation
+* useMemo
+* useCallback
+* Context API
+* reducer pattern
