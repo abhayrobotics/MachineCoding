@@ -1146,3 +1146,376 @@ Because spread performs a shallow copy, nested objects remain shared and may be 
 ### Why does React prefer immutable updates?
 
 Because React relies heavily on reference changes to detect state updates efficiently.
+
+
+# Object Destructuring
+
+Extract values from objects.
+
+```js
+const todo = {
+  text: "Learn React",
+  priority: "High"
+};
+
+const {
+  text,
+  priority
+} = todo;
+```
+
+Equivalent to:
+
+```js
+const text = todo.text;
+const priority = todo.priority;
+```
+
+---
+
+## Renaming Variables
+
+```js
+const {
+  text: task
+} = todo;
+```
+
+Creates:
+
+```js
+task
+```
+
+instead of:
+
+```js
+text
+```
+
+---
+
+## Default Values
+
+```js
+const {
+  priority = "Normal"
+} = todo;
+```
+
+Only creates a variable.
+
+Does NOT modify the object.
+
+---
+
+## Nested Destructuring
+
+```js
+const user = {
+  profile: {
+    city: "Siliguri"
+  }
+};
+
+const {
+  profile: {
+    city
+  }
+} = user;
+```
+
+---
+
+# Array Destructuring
+
+```js
+const arr = [10,20,30];
+```
+
+```js
+const [a,b] = arr;
+```
+
+Result:
+
+```js
+a = 10
+b = 20
+```
+
+---
+
+## Skipping Values
+
+```js
+const [a,,c] = arr;
+```
+
+Result:
+
+```js
+a = 10
+c = 30
+```
+
+---
+
+# Rest Operator
+
+## Arrays
+
+```js
+const nums = [10,20,30,40];
+
+const [first, ...rest] = nums;
+```
+
+Result:
+
+```js
+first = 10
+
+rest = [20,30,40]
+```
+
+---
+
+## Objects
+
+```js
+const todo = {
+  id: 1,
+  text: "Learn React",
+  status: false
+};
+
+const {
+  id,
+  ...rest
+} = todo;
+```
+
+Result:
+
+```js
+id = 1
+
+rest = {
+  text: "Learn React",
+  status: false
+}
+```
+
+---
+
+# Short Circuit Operators
+
+## AND (&&)
+
+Returns:
+
+* right side if left is truthy
+* left side if left is falsy
+
+```js
+5 && "React"
+```
+
+↓
+
+```js
+"React"
+```
+
+---
+
+```js
+0 && "React"
+```
+
+↓
+
+```js
+0
+```
+
+---
+
+React usage:
+
+```jsx
+{todos.length > 0 && <TodoList />}
+```
+
+---
+
+## OR (||)
+
+Returns first truthy value.
+
+```js
+"" || "Guest"
+```
+
+↓
+
+```js
+"Guest"
+```
+
+---
+
+```js
+"Abhay" || "Guest"
+```
+
+↓
+
+```js
+"Abhay"
+```
+
+---
+
+Problem:
+
+```js
+0 || 10
+```
+
+↓
+
+```js
+10
+```
+
+because `0` is falsy.
+
+---
+
+# Nullish Coalescing (??)
+
+Only treats:
+
+```js
+null
+undefined
+```
+
+as missing values.
+
+---
+
+```js
+0 ?? 10
+```
+
+↓
+
+```js
+0
+```
+
+---
+
+```js
+false ?? true
+```
+
+↓
+
+```js
+false
+```
+
+---
+
+```js
+null ?? 10
+```
+
+↓
+
+```js
+10
+```
+
+---
+
+Preferred for default values.
+
+---
+
+# Optional Chaining (?.)
+
+Safe property access.
+
+Without:
+
+```js
+user.profile.city
+```
+
+If user is null:
+
+```js
+Cannot read properties of null
+```
+
+---
+
+With:
+
+```js
+user?.profile?.city
+```
+
+↓
+
+```js
+undefined
+```
+
+No crash.
+
+---
+
+# Common React Pattern
+
+```js
+const city =
+  user?.profile?.city ?? "Unknown";
+```
+
+Meaning:
+
+* Try to get city
+* If missing
+* Use "Unknown"
+
+---
+
+# Important Interview Questions
+
+### Why does React prefer immutable updates?
+
+### Difference between shallow copy and deep copy?
+
+### Why does `{}` === `{}` return false?
+
+### Difference between `==` and `===`?
+
+### What does object destructuring do?
+
+### Difference between spread and rest operators?
+
+### Why does `0 || 10` return 10?
+
+### Difference between `||` and `??`?
+
+### Why use optional chaining (`?.`)?
+
+### What problem does `?.` solve in React?
+
+---
