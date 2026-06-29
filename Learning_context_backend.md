@@ -941,3 +941,469 @@ return
 ```
 
 stops execution.
+# Module 1 - Express Core (Progress Update)
+
+## ✅ Completed Topics
+
+### 1. req.url
+**Definition**
+- `req.url` contains the complete request URL received by Express, including the query string.
+
+Example:
+
+```http
+GET /products/55?color=red&page=2
+```
+
+```js
+req.url
+```
+
+Output:
+
+```text
+/products/55?color=red&page=2
+```
+
+---
+
+### 2. req.method
+
+**Definition**
+- `req.method` tells Express which HTTP method the client used.
+
+Examples:
+
+```text
+GET
+POST
+PUT
+DELETE
+PATCH
+```
+
+Example:
+
+```js
+console.log(req.method);
+```
+
+Output:
+
+```text
+GET
+```
+
+---
+
+### 3. Route Parameters (`req.params`)
+
+**Purpose**
+- Used to identify a specific resource.
+- Dynamic values are extracted from the URL path.
+
+Example:
+
+```js
+app.get("/products/:id", ...)
+```
+
+Request:
+
+```text
+GET /products/55
+```
+
+Express extracts:
+
+```js
+req.params = {
+    id: "55"
+}
+```
+
+Remember:
+- Route parameters are always strings.
+
+Mental Model:
+
+```text
+Route Parameters
+=
+Identity
+
+Which resource?
+```
+
+---
+
+### 4. Query Parameters (`req.query`)
+
+**Purpose**
+- Used to modify or filter the request.
+- Comes after the `?` in the URL.
+
+Example:
+
+```text
+GET /products?color=red&size=XL
+```
+
+Express extracts:
+
+```js
+req.query = {
+    color: "red",
+    size: "XL"
+}
+```
+
+Remember:
+- Query values are also strings.
+
+Mental Model:
+
+```text
+Query Parameters
+=
+Filters
+Options
+Sorting
+Pagination
+```
+
+Examples:
+
+```text
+?page=2
+
+?sort=date
+
+?limit=10
+
+?status=completed
+```
+
+---
+
+## ⭐ Important Difference
+
+Route Parameters
+
+```text
+/products/55
+```
+
+↓
+
+Identify Product 55.
+
+Query Parameters
+
+```text
+/products?color=red
+```
+
+↓
+
+Filter or modify the response.
+
+---
+
+# Middleware
+
+## What is Middleware?
+
+Middleware is a function that executes **between receiving a request and reaching the route handler**.
+
+It can:
+
+- Log requests
+- Authenticate users
+- Validate requests
+- Parse JSON
+- Handle CORS
+- Check permissions
+- Stop unauthorized requests
+
+---
+
+## Why Middleware Exists
+
+Without middleware:
+
+```text
+Browser
+
+↓
+
+Route
+
+↓
+
+Database
+```
+
+Every route would need duplicate code.
+
+With middleware:
+
+```text
+Browser
+
+↓
+
+Middleware
+
+↓
+
+Route
+
+↓
+
+Database
+```
+
+Common logic is written once and reused.
+
+---
+
+## app.use()
+
+**Definition**
+
+`app.use()` registers middleware.
+
+By default it executes for **every incoming request**, regardless of:
+
+- GET
+- POST
+- PUT
+- DELETE
+
+or
+
+- /tasks
+- /users
+- /login
+
+Example:
+
+```js
+app.use((req,res,next)=>{
+    console.log("Request Received");
+    next();
+});
+```
+
+---
+
+## Middleware Pipeline
+
+Express processes middleware in the order they are registered.
+
+```text
+Browser
+
+↓
+
+Middleware A
+
+↓
+
+Middleware B
+
+↓
+
+Route Handler
+
+↓
+
+Response
+```
+
+---
+
+## next()
+
+`next()` tells Express:
+
+> Continue to the next middleware or route handler.
+
+Example:
+
+```js
+app.use((req,res,next)=>{
+
+    console.log("A");
+
+    next();
+
+});
+```
+
+Without `next()`:
+
+Express waits forever unless a response is sent.
+
+---
+
+## Middleware Golden Rule
+
+Every middleware must do one of the following:
+
+```js
+next();
+```
+
+OR
+
+```js
+res.send(...);
+```
+
+OR
+
+```js
+res.json(...);
+```
+
+If it does neither:
+
+```text
+Browser
+
+↓
+
+Middleware
+
+↓
+
+Waiting...
+
+(No response)
+```
+
+The request hangs.
+
+---
+
+## Important Understanding
+
+Middleware runs **before Express determines whether a matching route exists**.
+
+Example:
+
+```text
+GET /abc
+```
+
+Flow:
+
+```text
+Browser
+
+↓
+
+Middleware ✅
+
+↓
+
+Find Route
+
+↓
+
+No Route
+
+↓
+
+404
+```
+
+Middleware still executes.
+
+---
+
+# Backend Thinking Framework (Interview)
+
+When explaining request flow, always think in this order:
+
+```text
+1. Browser sends request
+
+↓
+
+2. Express receives request
+
+↓
+
+3. Express extracts information
+
+↓
+
+4. Stores information
+
+↓
+
+5. Middleware executes
+
+↓
+
+6. Route Handler executes
+
+↓
+
+7. Business Logic
+
+↓
+
+8. Database
+
+↓
+
+9. Response sent
+
+↓
+
+10. Browser receives response
+```
+
+---
+
+# 11/10 Interview Mindset
+
+Never answer only:
+
+"What happened?"
+
+Instead answer:
+
+- What request came?
+- What did Express extract?
+- Where did Express store it?
+- Which middleware executed?
+- Why did Express move to the next middleware?
+- How was the response generated?
+
+This demonstrates understanding of the complete request lifecycle instead of memorized syntax.
+
+---
+
+## Current Progress
+
+```text
+Node.js Runtime          ✅
+npm                      ✅
+Express Basics           ✅
+req.url                  ✅
+req.method               ✅
+req.params               ✅
+req.query                ✅
+Middleware               🟡 (Core concept learned)
+
+Next:
+⬜ Route-specific middleware
+⬜ express.json()
+⬜ req.body
+⬜ REST APIs
+```
