@@ -2262,7 +2262,14 @@ Example columns:
 
 I understand why the `id` field is needed:
 
-* uniquely identifies each row
+* uniquely identifies each rowWhat is PostgreSQL?
+What is Prisma?
+What is a migration?
+Why do we run prisma migrate dev?
+What does prisma.expense.create() do?
+What does prisma.expense.findMany() do?
+Draw the request flow:
+React → Express → Prisma → PostgreSQL → React
 * used for update / delete / fetch specific expense
 * avoids ambiguity if multiple expenses have similar titles
 
@@ -2477,3 +2484,509 @@ to:
 * **real backend persistence using PostgreSQL + Prisma**
 * **full request → backend → database → response flow**
 * **building Expense Tracker as a proper full-stack app**
+
+
+-       What is PostgreSQL?
+-       postgreSQL is a SQL based relational database, where data is stored in tabular format, with rows and column, each row is one record , and each column is field or property of data
+-       What is Prisma?
+-       Prisma is a JavaScript/TypeScript ORM (Object Relational Mapper). It provides a type-safe client that lets us interact with the database using JavaScript instead of writing raw SQL. Prisma translates those operations into SQL queries and executes them on PostgreSQL.
+Prisma is the communication layer between your Node.js application and the database.
+-       What is a migration?
+-       It synchronizes the database structure (schema).
+-       Why do we run prisma migrate dev?
+-       to synchronize the database from our local server (prisma .schema) to actual database 
+-       What does prisma.expense.create() do?
+-       this inert a new data into the existing table, sql query behind this is INSERT INTO Expense (...)
+VALUES (...);
+-       What does prisma.expense.findMany() do?
+-       this fetch all the data in database 
+-       Draw the request flow:
+-       React → Express → Prisma → PostgreSQL → React
+
+# Learning Context — July 2026 (Week 2 Completed)
+
+## Overall Goal
+
+I am following a **4-month learning plan (June 1 – September 30, 2026)** to transition from my current government engineering job into a **Full Stack Developer / AI Full Stack Developer** role.
+
+The plan is divided into four tracks:
+
+- Frontend (React)
+- Backend (Node.js, Express, PostgreSQL, Prisma)
+- DSA
+- AI Integration
+
+July is a **Recovery Month**, where the primary goal is to become comfortable with backend development while keeping DSA and AI in continuity mode.
+
+---
+
+# Current Main Project
+
+## Expense Tracker
+
+This is my primary learning project.
+
+Current Stack:
+
+- React
+- Express.js
+- PostgreSQL
+- Prisma ORM
+
+The goal is to transform it from a localStorage project into a complete full-stack application.
+
+---
+
+# Current Backend Understanding
+
+I started knowing only basic Express.
+
+I now understand the complete backend request flow.
+
+```text
+React Component
+      │
+      ▼
+fetch()
+      │
+      ▼
+Express Route
+      │
+      ▼
+Prisma ORM
+      │
+      ▼
+PostgreSQL Database
+      │
+      ▼
+Prisma
+      │
+      ▼
+Express
+      │
+      ▼
+JSON Response
+      │
+      ▼
+React State
+      │
+      ▼
+UI Re-render
+```
+
+Every backend topic should be explained using this architecture.
+
+---
+
+# PostgreSQL Understanding
+
+I understand:
+
+- PostgreSQL is a relational database management system (RDBMS).
+- Data is stored inside tables.
+- Tables contain rows and columns.
+- Each row represents one record.
+- Each column represents one property of that record.
+- Primary keys uniquely identify each row.
+
+Current Expense table:
+
+- id
+- category
+- amount
+- subcategory
+- notes
+- date
+- createdAt
+
+---
+
+# Prisma Understanding
+
+I understand Prisma as an ORM.
+
+Mental model:
+
+```text
+Express
+   │
+Prisma ORM
+   │
+SQL
+   │
+PostgreSQL
+```
+
+Instead of writing SQL manually,
+
+```sql
+SELECT * FROM Expense;
+```
+
+I write
+
+```javascript
+await prisma.expense.findMany();
+```
+
+Instead of
+
+```sql
+INSERT INTO Expense (...);
+```
+
+I write
+
+```javascript
+await prisma.expense.create({...});
+```
+
+I understand that PostgreSQL actually executes SQL.
+Prisma generates and executes those SQL queries on behalf of my application.
+
+---
+
+# Migration Understanding
+
+I understand:
+
+`schema.prisma`
+
+describes the desired database structure.
+
+Migration synchronizes that structure with the actual PostgreSQL database.
+
+Mental model:
+
+```text
+Edit schema.prisma
+        │
+        ▼
+Run Migration
+        │
+        ▼
+PostgreSQL Table Updated
+```
+
+Migration changes the **database structure**, not the stored data.
+
+---
+
+# Express Knowledge
+
+Comfortable with:
+
+- Express basics
+- Routes
+- Middleware
+- app.use()
+- express.json()
+- req.body
+- req.params
+- req.query
+- async route handlers
+- Request/Response lifecycle
+
+---
+
+# APIs Built
+
+## GET
+
+```javascript
+app.get("/expenses")
+```
+
+using
+
+```javascript
+await prisma.expense.findMany();
+```
+
+---
+
+## POST
+
+```javascript
+app.post("/expenses")
+```
+
+using
+
+```javascript
+await prisma.expense.create({
+    data: {
+        ...
+    }
+});
+```
+
+including
+
+```javascript
+date: new Date(date)
+```
+
+Both APIs are working correctly.
+
+---
+
+# Frontend Integration Status
+
+Current flow:
+
+```text
+React Form
+
+↓
+
+fetch()
+
+↓
+
+Express
+
+↓
+
+Prisma
+
+↓
+
+PostgreSQL
+
+↓
+
+Prisma
+
+↓
+
+Express
+
+↓
+
+JSON Response
+
+↓
+
+React setState()
+
+↓
+
+UI Re-render
+```
+
+The frontend successfully creates expenses through the backend.
+
+The next step is removing localStorage completely.
+
+---
+
+# Current Learning Goals
+
+Next API:
+
+```text
+DELETE /expenses/:id
+```
+
+Topics to learn:
+
+- DELETE request
+- req.params
+- URL parameters
+- Number(req.params.id)
+- prisma.expense.delete()
+- Updating React state after successful deletion
+
+After DELETE:
+
+- PATCH /expenses/:id
+- Dashboard calculations from database
+- Remove localStorage completely
+
+---
+
+# React Knowledge
+
+Comfortable with:
+
+- useState
+- useEffect
+- useRef
+- Controlled components
+- Prop drilling
+- Callback props
+- Lifting state up
+- CRUD patterns
+- Immutable updates
+- localStorage
+- Fetch API
+
+Need more practice with:
+
+- Context API
+- useMemo
+- useCallback
+- Custom Hooks
+- Reducer Pattern
+- Render Optimization
+- React Internals
+
+---
+
+# DSA Status
+
+Current mode:
+
+Recovery / Continuity
+
+Already covered:
+
+- Arrays
+- Recursion
+- Stack basics
+- Queue basics
+
+Current goal:
+
+Maintain continuity while backend remains the primary focus.
+
+---
+
+# AI Track
+
+AI remains part of the roadmap.
+
+Preferred direction:
+
+Implement **one meaningful AI feature** inside an existing project instead of creating a completely separate AI project.
+
+Possible ideas:
+
+### Smart Task Manager
+
+- Task breakdown
+- Priority suggestion
+- Daily planner
+
+### Expense Tracker
+
+- Automatic expense categorization
+- Monthly spending summary
+- Overspending explanation
+
+Decision to be finalized during July.
+
+---
+
+# Teaching Style
+
+When teaching:
+
+Do NOT give generic tutorials.
+
+Teach through my own projects.
+
+Preferred approach:
+
+- Explain using Expense Tracker.
+- Ask me to write code.
+- Give implementation exercises.
+- Test me with coding questions.
+- Review my code like an interviewer.
+- Explain mistakes precisely.
+- Build mental models before syntax.
+
+---
+
+# Code Review Preference
+
+I prefer implementation-based learning.
+
+Instead of asking conceptual questions, ask questions like:
+
+- Complete this Express route.
+- Write this Prisma query.
+- Fix this backend bug.
+- Connect frontend with backend.
+- Implement this API.
+- Explain why this code fails.
+
+I want code reviews similar to a real technical interview.
+
+---
+
+# Current July Progress
+
+Completed:
+
+- PostgreSQL Installation
+- pgAdmin Setup
+- Database Creation
+- Prisma Installation
+- Prisma Initialization
+- DATABASE_URL Configuration
+- First Prisma Model
+- First Migration
+- Express + Prisma Integration
+- GET API
+- POST API
+- React → POST Integration
+- CORS Debugging
+- Prisma Version Debugging
+
+---
+
+# Next Tasks
+
+## Backend
+
+- Replace localStorage GET with backend GET
+- Build DELETE /expenses/:id
+- Connect DELETE from React
+- Remove localStorage completely
+
+---
+
+## DSA
+
+30–45 minutes daily.
+
+Focus:
+
+- Arrays
+- Recursion
+- Stack
+- Queue
+
+Maintain continuity.
+
+---
+
+## AI
+
+Finalize which project receives the first AI feature.
+
+No implementation required yet.
+
+---
+
+# Learning Philosophy
+
+I do not want to memorize commands.
+
+I want to understand:
+
+- Why each command exists.
+- Where it fits in the architecture.
+- What happens internally.
+- How React, Express, Prisma and PostgreSQL work together.
+
+Whenever introducing a new backend concept, first explain:
+
+1. Where it fits in the request flow.
+2. Why it exists.
+3. Then teach the syntax.
+4. Finally make me implement it myself.
+
+The goal is to become capable of building full-stack applications independently rather than following tutorials.
