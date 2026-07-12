@@ -2990,3 +2990,505 @@ Whenever introducing a new backend concept, first explain:
 4. Finally make me implement it myself.
 
 The goal is to become capable of building full-stack applications independently rather than following tutorials.
+
+# Learning Context (Updated)
+**Date:** 12 July 2026
+
+---
+
+# Backend Progress (React + Express + Prisma + PostgreSQL)
+
+## ✅ PostgreSQL
+
+### Learned
+- Installed PostgreSQL locally.
+- Understood that PostgreSQL is an RDBMS storing data in tables (rows and columns).
+- Created my first database.
+- Connected PostgreSQL to Prisma using `DATABASE_URL`.
+
+---
+
+## ✅ Prisma
+
+### Installation
+```bash
+npm install prisma --save-dev
+npm install @prisma/client
+npx prisma init
+```
+
+### Schema
+- Created my first Prisma model (`Expense`).
+- Understood that `schema.prisma` is only a blueprint and does not modify the database.
+
+Example:
+
+```prisma
+model Expense{
+    id Int @id @default(autoincrement())
+    category String
+    amount Float
+    subcategory String
+    notes String
+    date DateTime
+    createdAt DateTime @default(now())
+}
+```
+
+---
+
+## ✅ Migration
+
+Learned migration workflow.
+
+```text
+schema.prisma
+      ↓
+npx prisma migrate dev --name add_expense_table
+      ↓
+SQL Migration Generated
+      ↓
+PostgreSQL Updated
+      ↓
+Prisma Client Generated
+```
+
+Commands learned
+
+```bash
+npx prisma migrate dev --name add_expense_table
+npx prisma generate
+npx prisma studio
+```
+
+---
+
+## ✅ Prisma CRUD
+
+### Create
+
+```js
+await prisma.expense.create({
+    data:{...}
+})
+```
+
+Equivalent SQL
+
+```sql
+INSERT INTO Expense (...)
+VALUES (...);
+```
+
+---
+
+### Read
+
+```js
+await prisma.expense.findMany()
+```
+
+Equivalent SQL
+
+```sql
+SELECT * FROM Expense;
+```
+
+---
+
+### Update
+
+```js
+await prisma.expense.update({
+    where:{
+        id
+    },
+    data:{...}
+})
+```
+
+Equivalent SQL
+
+```sql
+UPDATE Expense
+SET ...
+WHERE id = ...;
+```
+
+---
+
+### Delete
+
+```js
+await prisma.expense.delete({
+    where:{
+        id
+    }
+})
+```
+
+Equivalent SQL
+
+```sql
+DELETE FROM Expense
+WHERE id = ...;
+```
+
+---
+
+# Express Backend
+
+Implemented REST APIs.
+
+## GET
+
+```text
+GET /expenses
+```
+
+Returns all expenses.
+
+---
+
+## POST
+
+```text
+POST /expenses
+```
+
+Creates a new expense.
+
+---
+
+## PATCH
+
+```text
+PATCH /expenses/:id
+```
+
+Updates one expense.
+
+---
+
+## DELETE
+
+```text
+DELETE /expenses/:id
+```
+
+Deletes one expense.
+
+---
+
+## Middleware Learned
+
+```js
+app.use(express.json())
+```
+
+Parses incoming JSON request bodies.
+
+---
+
+## CORS
+
+Configured CORS to allow frontend requests.
+
+```js
+app.use(cors({
+    origin:"http://localhost:5173",
+    methods:["GET","POST","PATCH","DELETE"],
+    allowedHeaders:["Content-Type"]
+}))
+```
+
+Understood why browsers block requests coming from different origins.
+
+---
+
+# React + Backend Integration
+
+Migrated Expense Tracker from Local Storage to PostgreSQL.
+
+Old Flow
+
+```text
+React
+   ↓
+Local Storage
+```
+
+New Flow
+
+```text
+React
+   ↓
+Express
+   ↓
+Prisma
+   ↓
+PostgreSQL
+```
+
+---
+
+## GET
+
+```js
+fetch("/expenses")
+```
+
+↓
+
+Update React state.
+
+---
+
+## POST
+
+```js
+fetch("/expenses",{
+    method:"POST"
+})
+```
+
+↓
+
+Database
+
+↓
+
+Created Expense returned
+
+↓
+
+Append to state.
+
+---
+
+## DELETE
+
+```js
+fetch("/expenses/5",{
+    method:"DELETE"
+})
+```
+
+↓
+
+Database
+
+↓
+
+Deleted Expense returned
+
+↓
+
+Remove using
+
+```js
+filter()
+```
+
+---
+
+## PATCH
+
+```js
+fetch("/expenses/5",{
+    method:"PATCH"
+})
+```
+
+↓
+
+Updated Expense returned
+
+↓
+
+Replace one object using
+
+```js
+map()
+```
+
+Pattern learned
+
+```js
+setAllExpense(prev =>
+    prev.map(item =>
+        item.id===updatedExpense.id
+        ? updatedExpense
+        : item
+    )
+)
+```
+
+---
+
+# Edit Flow
+
+Implemented complete Edit functionality.
+
+Flow
+
+```text
+ExpenseList
+
+↓
+
+Click Edit
+
+↓
+
+Send id to Home
+
+↓
+
+Find expense object
+
+↓
+
+Store in editableExpense
+
+↓
+
+Pass editableExpense to AddExpense
+
+↓
+
+Auto-fill form
+
+↓
+
+User edits values
+
+↓
+
+PATCH request
+
+↓
+
+Database updated
+
+↓
+
+Updated object returned
+
+↓
+
+React state updated using map()
+```
+
+---
+
+# Mental Models Learned
+
+## Why Express?
+
+React should never communicate directly with PostgreSQL because:
+
+- Security
+- Authentication
+- Authorization
+- Validation
+- Business Logic
+- Database credentials remain hidden
+
+---
+
+## Prisma
+
+Prisma is NOT a database.
+
+It translates JavaScript into SQL.
+
+```text
+JavaScript
+
+↓
+
+Prisma
+
+↓
+
+SQL
+
+↓
+
+PostgreSQL
+```
+
+---
+
+## PostgreSQL
+
+Stores actual data.
+
+Prisma stores nothing.
+
+---
+
+## Migration
+
+`schema.prisma`
+
+↓
+
+Blueprint
+
+↓
+
+Migration
+
+↓
+
+Actual Database
+
+---
+
+# Commands to Remember
+
+```bash
+npm install prisma --save-dev
+
+npm install @prisma/client
+
+npx prisma init
+
+npx prisma migrate dev --name migration_name
+
+npx prisma generate
+
+npx prisma studio
+```
+
+---
+
+# Expense Tracker Status
+
+## Backend
+
+- ✅ PostgreSQL Connected
+- ✅ Prisma Configured
+- ✅ Express Server
+- ✅ GET API
+- ✅ POST API
+- ✅ PATCH API
+- ✅ DELETE API
+- ✅ CORS Configured
+- ✅ React Connected
+- ✅ CRUD Complete
+
+---
+
+# Major Achievement
+
+Built my first complete Full Stack CRUD application using
+
+- React
+- Express.js
+- Prisma ORM
+- PostgreSQL
+
+with complete database integration replacing Local Storage.

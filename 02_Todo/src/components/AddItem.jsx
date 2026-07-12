@@ -64,7 +64,7 @@ const AddItem = ({ fetchNewItem, updateChild, setUpdateChild }) => {
                 <option className='text-xs text-green-300' >Low</option>
             </select>
 
-
+///
             {Object.keys(updateChild).length != 0 ?
                 <div onClick={handleUpdate} className='border rounded-lg px-2 mx-1 py-0.5 bg-blue-800 cursor-pointer hover:text-white'>Update</div>
 
